@@ -1,3 +1,4 @@
+"""OrangeData Client Library"""
 import re
 
 
@@ -8,7 +9,9 @@ def phone_is_valid(phone):
     :return: Результат валидации
     :rtype: bool
     """
-    return True if re.match(r'^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', phone) else False
+    if re.match(r'^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', phone):
+        return True
+    return False
 
 
 def length_is_valid(obj, min_=None, max_=None):

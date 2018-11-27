@@ -8,7 +8,7 @@ def main():
     config = {
         'inn': '3123011520',
         'api_url': 'https://apip.orangedata.ru:2443',
-        'sign_pkey': 'private_key.pem',
+        'sign_private_key': 'private_key.pem',
         'client_key': 'client.key',
         'client_cert': 'client.crt',
     }
@@ -26,8 +26,12 @@ def main():
     client.add_payment_to_order(1, Decimal(131.23))
     client.add_payment_to_order(2, Decimal(3712.2))
 
-    client.add_agent_to_order(127, ['+79998887766', '+76667778899'], 'Operation', ['+79998887766'], ['+79998887766'],
-                              'Name', 'ulitsa Adress, dom 7', '3123011520', ['+79998887766', '+76667778899'])
+    client.add_agent_to_order(
+        2,
+        ['+79998887766', '+76667778899'],
+        'Operation', ['+79998887766'], ['+79998887766'],
+        'Name', 'ulitsa Adress, dom 7', '3123011520', ['+79998887766', '+76667778899']
+    )
 
     client.add_user_attribute('Любимая цитата', 'В здоровом теле здоровый дух, этот лозунг еще не потух!')
 

@@ -10,10 +10,7 @@ from Crypto.PublicKey import RSA
 from Crypto.Signature import pkcs1_15
 
 from OrangeData.validators import phone_is_valid, length_is_valid
-
-
-class OrangeDataClientValidationError(Exception):
-    pass
+from OrangeData.exceptions import OrangeDataClientValidationError
 
 
 class OrangeDataClient(object):
@@ -91,18 +88,22 @@ class OrangeDataClient(object):
         else:
             raise OrangeDataClientValidationError('Incorrect taxationSystem')
 
-        if '@' in customer_contact or re.match('^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', customer_contact):
+        if '@' in customer_contact or re.match(r'^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', customer_contact):
             self.__order_request['content']['customerContact'] = customer_contact
         else:
             raise OrangeDataClientValidationError('Incorrect customer Contact')
 
-    def add_position_to_order(self, quantity, price, tax, text, payment_method_type=4, payment_subject_type=1,
-                              supplier_inn=None, supplier_phone_numbers=None, supplier_name=None, agent_type=None,
-                              payment_transfer_operator_phone_numbers=None, payment_agent_operation=None,
-                              payment_agent_phone_numbers=None, payment_operator_phone_numbers=None,
-                              payment_operator_name=None, payment_operator_address=None, payment_operator_inn=None,
-                              unit_of_measurement=None, additional_attribute=None, manufacturer_country_code=None,
-                              customs_declaration_number=None, excise=None):
+    def add_position_to_order(self, quantity, price, tax, text, payment_method_type=4,
+                              payment_subject_type=1, supplier_inn=None,
+                              supplier_phone_numbers=None, supplier_name=None, agent_type=None,
+                              payment_transfer_operator_phone_numbers=None,
+                              payment_agent_operation=None, payment_agent_phone_numbers=None,
+                              payment_operator_phone_numbers=None, payment_operator_name=None,
+                              payment_operator_address=None, payment_operator_inn=None,
+                              unit_of_measurement=None, additional_attribute=None,
+                              manufacturer_country_code=None, customs_declaration_number=None,
+                              excise=None):
+
         """
         Добавление позиций
         :param quantity: Количество предмета расчета, 1023
@@ -349,12 +350,12 @@ class OrangeDataClient(object):
         else:
             raise OrangeDataClientValidationError('Invalid Payment Type or Amount')
 
-    def add_agent_to_order(self, agent_type=None, pay_TOP=None, pay_AO=None, pay_APN=None, pay_OPN=None, pay_ON=None,
-                           pay_OA=None, pay_Op_INN=None, sup_PN=None, automat_number=None, settlement_address=None,
-                           settlement_place=None):
+    def add_agent_to_order(self, agent_type=None, pay_TOP=None, pay_AO=None, pay_APN=None,
+                           pay_OPN=None, pay_ON=None, pay_OA=None, pay_Op_INN=None, sup_PN=None,
+                           automat_number=None, settlement_address=None, settlement_place=None):
         """
         Добавление агента
-        :param agent_type: Признак агента, 1057. Числою Оказывающий услугу покупателю (клиенту) пользователь является:
+        :param agent_type: Признак агента, 1057. Число Оказывающий услугу покупателю (клиенту) пользователь является:
             0 – банковский платежный агент
             1 – банковский платежный субагент
             2 – платежный агент
@@ -478,8 +479,8 @@ class OrangeDataClient(object):
 
     def __sign(self, data):
         key = RSA.import_key(open(self.__sign_private_key).read())
-        h = SHA256.new(json.dumps(data).encode())
-        signature = pkcs1_15.new(key).sign(h)
+        hash_data = SHA256.new(json.dumps(data).encode())
+        signature = pkcs1_15.new(key).sign(hash_data)
         return base64.b64encode(signature).decode()
 
     def send_order(self):
@@ -516,10 +517,11 @@ class OrangeDataClient(object):
 
         return self.__create_response(response)
 
-    def create_correction(self, id_, correction_type, type_, description, cause_document_date, cause_document_number,
-                          total_sum, cash_sum, e_cash_sum, pre_payment_sum, post_payment_sum, other_payment_sum,
-                          tax_1_sum, tax_2_sum, tax_3_sum, tax_4_sum, tax_5_sum, tax_6_sum, taxation_system, group=None,
-                          key=None):
+    def create_correction(self, id_, correction_type, type_, description, cause_document_date,
+                          cause_document_number,
+                          total_sum, cash_sum, e_cash_sum, pre_payment_sum, post_payment_sum,
+                          other_payment_sum, tax_1_sum, tax_2_sum, tax_3_sum, tax_4_sum, tax_5_sum,
+                          tax_6_sum, taxation_system, group=None, key=None):
         """
         Создание чека-коррекции
         :param id_: Идентификатор документа (Строка от 1 до 32 символов)
