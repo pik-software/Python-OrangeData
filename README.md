@@ -6,8 +6,10 @@ Python integration for OrangeData service
 
 Актуальная версия библиотеки: `2.1.1`
 
-##### Использование:
+## Использование:
+
 * создать объект класса `OrangeDataClient`
+
 ```python
 from client import OrangeDataClient
 
@@ -23,6 +25,7 @@ client = OrangeDataClient(**params)
 ```
 
 * создание чека, добавление сущностей
+
 ```python
 client.create_order(**order_kwargs)
 
@@ -41,11 +44,13 @@ client.send_order()
 ```
 
 * получение чека
+
 ```python
 order = client.get_order_status(order_id)
 ```
 
 * создание коррекции
+
 ```python
 client.create_correction(**correction_kwargs)
 
@@ -54,6 +59,7 @@ client.post_correction()
 ```
 
 * получение коррекции
+
 ```python
 correction = client.get_correction_status(correction_number)
 ```
@@ -69,6 +75,7 @@ correction = client.get_correction_status(correction_number)
     'headers': {...}
 }
 ```
+
 * `code` - код ответа от сервера
 * `data` - декодированное тело ответа
 * `headers` - заголовки ответа
