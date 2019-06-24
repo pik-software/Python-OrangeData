@@ -35,7 +35,7 @@ class OrangeDataClient(object):
         self.__ca_cert = ca_cert
         self.__client_cert_pass = client_cert_pass
 
-    def create_order(self, id_, type_, customer_contact, taxation_system, group=None, key=None, callback_url=None):
+    def create_order(self, id_, type_, taxation_system, group=None, key=None, customer_contact=None, callback_url=None):
         """
         Создание чека
         :param id_: Идентификатор документа (Строка от 1 до 32 символов)
@@ -58,7 +58,7 @@ class OrangeDataClient(object):
         :param callback_url: URL для отправки результатов обработки чека POST запросом
         :type id_: str
         :type type_: int
-        :type customer_contact: str
+        :type customer_contact: str or None
         :type taxation_system: int
         :type group: str or None
         :type key: str or None
@@ -90,10 +90,11 @@ class OrangeDataClient(object):
         else:
             raise OrangeDataClientValidationError('Incorrect taxationSystem')
 
-        if '@' in customer_contact or re.match(r'^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', customer_contact):
-            self.__order_request['content']['customerContact'] = customer_contact
-        else:
-            raise OrangeDataClientValidationError('Incorrect customer Contact')
+        if customer_contact:
+            if '@' in customer_contact or re.match(r'^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', customer_contact):
+                self.__order_request['content']['customerContact'] = customer_contact
+            else:
+                raise OrangeDataClientValidationError('Incorrect customer Contact')
 
         if callback_url:
             self.__order_request['callbackUrl'] = callback_url
