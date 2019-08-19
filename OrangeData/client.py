@@ -527,7 +527,8 @@ class OrangeDataClient(object):
                           cause_document_number,
                           total_sum, cash_sum, e_cash_sum, pre_payment_sum, post_payment_sum,
                           other_payment_sum, tax_1_sum, tax_2_sum, tax_3_sum, tax_4_sum, tax_5_sum,
-                          tax_6_sum, taxation_system, group=None, key=None):
+                          tax_6_sum, taxation_system, group=None, key=None,
+                          callback_url=None):
         """
         Создание чека-коррекции
         :param id_: Идентификатор документа (Строка от 1 до 32 символов)
@@ -570,6 +571,7 @@ class OrangeDataClient(object):
             5 - Патентная система налогообложения
         :param group: Группа устройств, с помощью которых будет пробит чек (не всегда является обязательным полем)
         :param key: Название ключа который должен быть использован для проверки подпись
+        :param callback_url: URL для отправки результатов обработки чека POST запросом
         :type id_: str
         :type correction_type: int
         :type type_: int
@@ -591,6 +593,7 @@ class OrangeDataClient(object):
         :type taxation_system: int
         :type group: str
         :type key: str
+        :type callback_url: str or None
         :return:
         """
         self.__correction_request = dict()
@@ -633,6 +636,9 @@ class OrangeDataClient(object):
             self.__correction_request['content']['taxationSystem'] = taxation_system
         else:
             raise OrangeDataClientValidationError('Incorrect taxation_system')
+
+        if callback_url:
+            self.__correction_request['callbackUrl'] = callback_url
 
     def post_correction(self):
         """
