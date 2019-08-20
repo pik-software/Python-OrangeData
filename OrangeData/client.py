@@ -528,7 +528,8 @@ class OrangeDataClient(object):
                           total_sum, cash_sum, e_cash_sum, pre_payment_sum, post_payment_sum,
                           other_payment_sum, tax_1_sum, tax_2_sum, tax_3_sum, tax_4_sum, tax_5_sum,
                           tax_6_sum, taxation_system, group=None, key=None,
-                          callback_url=None):
+                          callback_url=None, settlement_address=None,
+                          settlement_place=None):
         """
         Создание чека-коррекции
         :param id_: Идентификатор документа (Строка от 1 до 32 символов)
@@ -572,6 +573,8 @@ class OrangeDataClient(object):
         :param group: Группа устройств, с помощью которых будет пробит чек (не всегда является обязательным полем)
         :param key: Название ключа который должен быть использован для проверки подпись
         :param callback_url: URL для отправки результатов обработки чека POST запросом
+        :param settlement_address: Адрес расчетов, 1009
+        :param settlement_place: Место расчетов, 1187
         :type id_: str
         :type correction_type: int
         :type type_: int
@@ -594,6 +597,8 @@ class OrangeDataClient(object):
         :type group: str
         :type key: str
         :type callback_url: str or None
+        :type settlement_address: str
+        :type settlement_place: str
         :return:
         """
         self.__correction_request = dict()
@@ -639,6 +644,13 @@ class OrangeDataClient(object):
 
         if callback_url:
             self.__correction_request['callbackUrl'] = callback_url
+
+        if settlement_address:
+            self.__order_request['content']['settlementAddress'] \
+                = settlement_address
+        if settlement_place:
+            self.__order_request['content']['settlementPlace'] \
+                = settlement_place
 
     def post_correction(self):
         """
