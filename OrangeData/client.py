@@ -646,11 +646,9 @@ class OrangeDataClient(object):
             self.__correction_request['callbackUrl'] = callback_url
 
         if settlement_address:
-            self.__order_request['content']['settlementAddress'] \
-                = settlement_address
+            self.__order_request['content']['settlementAddress'] = settlement_address
         if settlement_place:
-            self.__order_request['content']['settlementPlace'] \
-                = settlement_place
+            self.__order_request['content']['settlementPlace'] = settlement_place
 
     def post_correction(self):
         """
