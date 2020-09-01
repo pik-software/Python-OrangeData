@@ -686,6 +686,23 @@ class OrangeDataClient(object):
 
         return self.__create_response(response)
 
+    def get_devices_status(self, group):
+        """
+        Статус ККТ в группе
+        :param group: Название группы устройств
+        :type group: str
+        :return:
+        """
+
+        url = urllib.parse.urljoin(
+            self.__api_url,
+            f'/api/v2/devices/status/{self.__inn}/{group}'
+        )
+
+        response = requests.get(url, cert=(self.__client_cert, self.__client_key))
+
+        return self.__create_response(response)
+
     @staticmethod
     def __create_response(response):
         """
