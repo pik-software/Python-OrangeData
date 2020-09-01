@@ -712,6 +712,6 @@ class OrangeDataClient(object):
         """
         return {
             'code': response.status_code,
-            'data': response.content.decode(),
+            'data': response.json(),
             'headers': response.headers,
         }
