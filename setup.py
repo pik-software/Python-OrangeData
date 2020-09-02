@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="OrangeData",
-    version="2.1.5",
+    version="2.1.6",
     url="https://github.com/vanzhiganov/Python-OrangeData",
     packages=[
         'OrangeData'
